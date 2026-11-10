@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>APSIFROST | Virtual Photography Exhibition</title>
+    <style>
+        /* 1. Page Background & Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: black;
+            color: #e2e2e2;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        /* 2. Top Banner / Header Styling */
+        .header-box {
+            background-color: #18181c;
+            padding: 40px 20px;
+            border-bottom: 3px solid #d4af37;
+        }
+
+        h1 {
+            color: #d4af37;
+            font-family: Georgia, serif;
+            letter-spacing: 3px;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            color: bisque;
+            font-family: Georgia, serif;
+            margin-top: 35px;
+        }
+
+        h3 {
+            color: #ffffff;
+            margin-top: 5px;
+        }
+
+        /* 3. Navigation & Filter Buttons */
+        .nav-bar {
+            background-color: #222228;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .nav-btn {
+            color: bisque;
+            background-color: #2e2e36;
+            text-decoration: none;
+            padding: 10px 18px;
+            margin: 5px;
+            border-radius: 25px;
+            border: 1px solid #d4af37;
+            display: inline-block;
+            transition: 0.3s;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background-color: #d4af37;
+            color: #000000;
+            transform: scale(1.05);
+        }
+
+        /* 4. Side-by-Side Gallery Cards */
+        .photo-card {
+            background-color: #1a1a20;
+            border: 2px solid #33333d;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px;
+            width: 440px;
+            display: inline-block;
+            vertical-align: top;
+            text-align: left;
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.7);
+            transition: 0.3s;
+        }
+
+        .photo-card:hover {
+            border-color: #d4af37;
+            transform: translateY(-8px);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        figcaption {
+            color: #aaa;
+            font-size: 13px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* 5. Styled Box for EXIF Camera Lists */
+        .exif-box {
+            background-color: #121216;
+            padding: 12px 15px;
+            border-left: 4px solid #d4af37;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        mark {
+            background-color: #d4af37;
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* 6. Buttons inside each card */
+        .order-link {
+            display: inline-block;
+            background-color: darkolivegreen;
+            color: white;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .order-link:hover {
+            background-color: #6b8e23;
+        }
+
+        /* 7. Interactive Checkout & Price Calculator Section */
+        .buy-section {
+            background-color: #181c18;
+            border: 3px solid darkolivegreen;
+            border-radius: 15px;
+            padding: 35px;
+            width: 650px;
+            margin: 40px auto;
+            text-align: left;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        select,
+        input {
+            padding: 8px;
+            width: 100%;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #d4af37;
+            background-color: #222;
+            color: white;
+            font-size: 15px;
+        }
+
+        pre {
+            background-color: #0d0f0d;
+            color: #a8e6a3;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed darkolivegreen;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= TOP HEADER ================= -->
+    <div class="header-box" id="top">
+        <h1>&spades; APSIFROST VIRTUAL GALLERY &spades;</h1>
+        <h3><i>Curated Fine Art Photography Exhibition &amp; Print Store</i></h3>
+        <p>
+            Explore our <strong>4 themed collections</strong>. Click any category button below to filter the gallery,
+            or click a photo to inspect <abbr title="Exchangeable Image File Format">EXIF</abbr> metadata.
+        </p>
+    </div>
+
+    <!-- ================= INTERACTIVE JS FILTER BAR ================= -->
+    <div class="nav-bar">
+        <button onclick="filterGallery('all')" class="nav-btn">Show All (4)</button>
+        <button onclick="filterGallery('street')" class="nav-btn">1. Street Photography</button>
+        <button onclick="filterGallery('wildlife')" class="nav-btn">2. Wildlife</button>
+        <button onclick="filterGallery('architecture')" class="nav-btn">3. Minimalist Architecture</button>
+        <button onclick="filterGallery('portraits')" class="nav-btn">4. Portraits</button>
+        <a href="#buy-prints" class="nav-btn"><mark>&hearts; Buy Prints</mark></a>
+    </div>
+
+    <h2 id="gallery-heading">&diams; Curated Exhibition Gallery &diams;</h2>
+    <hr color="#d4af37" size="2px" width="25%">
+
+
+    <!-- ================= CARD 1: STREET PHOTOGRAPHY ================= -->
+    <div class="photo-card" id="card-street">
+        <h3><u>1. Street Photography: Cycling in Winter</u></h3>
+
+        <a href="Cycliste_à_place_d'Italie-Paris_crop.jpg?w=1200" target="_blank">
+            <img src="Cycliste_à_place_d'Italie-Paris_crop.jpg?w=600" title="Click to open High-Resolution Image"
+                alt="Street Photography" style="border: 4px solid bisque;">
+        </a>
+        <figcaption><i>Fig 1.1 - A chilly early morning cycling commute. (Click photo for High-Res)</i></figcaption>
+
+        <p>
+            <b>Photographer:</b> <cite>Aasim Bhat</cite><br><br>
+            <b>Artist Statement:</b> <q><u>I was walking to the bus stop when I suddenly saw this lady riding her
+                    beautiful bicycle. I couldn't help but capture this moment.</u></q>
+        </p>
+
+        <div class="exif-box">
+            <b><abbr title="Exchangeable Image File Format">EXIF</abbr> Camera Metadata:</b>
+            <ul type="square">
+                <li><b>Camera:</b> Sony Alpha A7<sub>IV</sub></li>
+                <li><b>Lens:</b> 35mm Prime</li>
+                <li><b>Settings:</b> <var>f/1.8</var> | Shutter: <var>1/250s</var> | ISO: <var>800</var></li>
+            </ul>
+        </div>
+
+        <p>
+            <b>Print Price:</b> <s>Rs. 5,000</s> &nbsp; <ins><b>Rs. 3,500</b></ins> &nbsp; <mark>30% OFF</mark><br>
+            <button onclick="selectArtworkForPurchase(3500, 'Artwork #1: Rain in Downtown')" class="order-link">
+                &rarr; Select This Print (Rs. 3,500)
+            </button>
+        </p>
+    </div>
+
+
+    <!-- ================= CARD 2: WILDLIFE ================= -->
+    <div class="photo-card" id="card-wildlife">
+        <h3><u>2. Wildlife: The Golden Predator</u></h3>
+
+        <a href="https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=1200" target="_blank">
+            <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=600"
+                title="Click to open High-Resolution Image" alt="Wildlife Photography"
+                style="border: 4px solid darkolivegreen;">
+        </a>
+        <figcaption><i>Fig 2.1 - Predator in the golden hour (Click photo for High-Res)</i></figcaption>
+
+        <p>
+            <b>Photographer:</b> <cite>Pinaki Pattanayak</cite><br><br>
+            <b>Artist Statement:</b> <q><u>Patience is the most important tool in wildlife photography. Direct eye
+                    contact turns a moment into eternity.</u></q>
+        </p>
+
+        <div class="exif-box">
+            <b><abbr title="Exchangeable Image File Format">EXIF</abbr> Camera Metadata:</b>
+            <ul type="disc">
+                <li><b>Camera:</b> Canon EOS R<sub>5</sub></li>
+                <li><b>Lens:</b> 400mm Telephoto</li>
+                <li><b>Settings:</b> <var>f/2.8</var> | Shutter: <var>1/1000s</var> | ISO: <var>400</var></li>
+            </ul>
+        </div>
+
+        <p>
+            <b>Print Price:</b> <s>Rs. 6,000</s> &nbsp; <ins><b>Rs. 4,200</b></ins><br>
+            <button onclick="selectArtworkForPurchase(4200, 'Artwork #2: The Golden Predator')" class="order-link">
+                &rarr; Select This Print (Rs. 4,200)
+            </button>
+        </p>
+    </div>
+
+
+    <!-- ================= CARD 3: MINIMALIST ARCHITECTURE ================= -->
+    <div class="photo-card" id="card-architecture">
+        <h3><u>3. Minimalist Architecture: Concrete Sky</u></h3>
+
+        <a href="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=1200" target="_blank">
+            <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600"
+                title="Click to open High-Resolution Image" alt="Minimalist Architecture"
+                style="border: 4px solid bisque;">
+        </a>
+        <figcaption><i>Fig 3.1 - Shadows and angles at noon (Click photo for High-Res)</i></figcaption>
+
+        <p>
+            <b>Photographer:</b> <cite>Saumya Yadav</cite><br><br>
+            <b>Artist Statement:</b> <q><u>When you remove the noise of the street, simple geometric walls become modern
+                    sculptures.</u></q>
+        </p>
+
+        <div class="exif-box">
+            <b><abbr title="Exchangeable Image File Format">EXIF</abbr> Camera Metadata:</b>
+            <ul type="circle">
+                <li><b>Camera:</b> Nikon Z<sub>7</sub></li>
+                <li><b>Lens:</b> 24mm Wide Angle</li>
+                <li><b>Settings:</b> <var>f/8.0</var> | Shutter: <var>1/500s</var> | ISO: <var>100</var></li>
+            </ul>
+        </div>
+
+        <p>
+            <b>Print Price:</b> <ins><b>Rs. 3,000</b></ins><br>
+            <button onclick="selectArtworkForPurchase(3000, 'Artwork #3: Concrete Sky')" class="order-link">
+                &rarr; Select This Print (Rs. 3,000)
+            </button>
+        </p>
+    </div>
+
+
+    <!-- ================= CARD 4: PORTRAITS ================= -->
+    <div class="photo-card" id="card-portraits">
+        <h3><u>4. Portraits: Studio Light &amp; Soul</u></h3>
+
+        <a href="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200" target="_blank">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600"
+                title="Click to open High-Resolution Image" alt="Portrait Photography"
+                style="border: 4px solid darkolivegreen;">
+        </a>
+        <figcaption><i>Fig 4.1 - Natural north-window light portrait (Click photo for High-Res)</i></figcaption>
+
+        <p>
+            <b>Photographer:</b> <cite>Foustina Saju</cite><br><br>
+            <b>Artist Statement:</b> <q><u>Every face carries a story. No artificial flashes were used—only one open
+                    window at sunset.</u></q>
+        </p>
+
+        <div class="exif-box">
+            <b><abbr title="Exchangeable Image File Format">EXIF</abbr> Camera Metadata:</b>
+            <ul type="square">
+                <li><b>Camera:</b> Fujifilm X-T<sub>4</sub></li>
+                <li><b>Lens:</b> 85mm Portrait Prime</li>
+                <li><b>Settings:</b> <var>f/1.4</var> | Shutter: <var>1/160s</var> | ISO: <var>200</var></li>
+            </ul>
+        </div>
+
+        <p>
+            <b>Print Price:</b> <ins><b>Rs. 3,800</b></ins><br>
+            <button onclick="selectArtworkForPurchase(3800, 'Artwork #4: Studio Light & Soul')" class="order-link">
+                &rarr; Select This Print (Rs. 3,800)
+            </button>
+        </p>
+    </div>
+
+
+    <!-- ================= 5. INTERACTIVE PRINT PURCHASE CALCULATOR ================= -->
+    <div class="buy-section" id="buy-prints">
+        <h2>&hearts; Fine Art Print Purchase Calculator &hearts;</h2>
+        <p>All exhibition prints are produced on <strong>100% Cotton Museum Archival Paper</strong>.</p>
+
+        <b>Print Size Guide (Area = Length<sup>2</sup>):</b>
+        <ol type="A">
+            <li><b>Standard Print (8 x 10 inches):</b> + Rs. 0 (Base Price)</li>
+            <li><b>Medium Gallery Print (16 x 20 inches):</b> + Rs. 1,000</li>
+            <li><b>Large Framed Masterpiece (24 x 36 inches):</b> + Rs. 2,500</li>
+        </ol>
+
+        <hr color="darkolivegreen" size="2px">
+
+        <!-- Simple Dropdowns for Basic JS Price Calculation -->
+        <b>Step 1: Choose Artwork:</b>
+        <select id="artwork-select" onchange="calculateTotal()">
+            <option value="3500">Artwork #1: Rain in Downtown (Rs. 3,500)</option>
+            <option value="4200">Artwork #2: The Golden Predator (Rs. 4,200)</option>
+            <option value="3000">Artwork #3: Concrete Sky (Rs. 3,000)</option>
+            <option value="3800">Artwork #4: Studio Light &amp; Soul (Rs. 3,800)</option>
+        </select>
+
+        <b>Step 2: Choose Print Size &amp; Framing:</b>
+        <select id="size-select" onchange="calculateTotal()">
+            <option value="0">Option A: Standard 8x10 Print (+ Rs. 0)</option>
+            <option value="1000">Option B: Medium 16x20 Print (+ Rs. 1,000)</option>
+            <option value="2500">Option C: Large 24x36 Framed (+ Rs. 2,500)</option>
+        </select>
+
+        <b>Step 3: Enter Your Name for the Collector Certificate:</b>
+        <input type="text" id="buyer-name" placeholder="Enter your full name...">
+
+        <b>Live Order Receipt:</b>
+        <pre id="receipt-box">
+===================================================
+  LUMINA EXHIBITION - OFFICIAL PRINT ESTIMATE
+===================================================
+  Base Artwork Price             : Rs. 3500
+  Size &amp; Frame Upgrade           : Rs. 0
+  University Student Shipping    : FREE
+---------------------------------------------------
+  TOTAL PAYABLE AMOUNT           : Rs. 3500
+===================================================
+</pre>
+
+        <button onclick="confirmOrder()" class="order-link" style="width: 100%; font-size: 16px; padding: 14px;">
+            &check; Confirm &amp; Reserve Fine Art Print
+        </button>
+
+        <br><br>
+        <p>
+            &#64; <b>Direct Email Support:</b>
+            <a href="mailto:bhataasim987@gmail.com" style="color: bisque;">bhataasim987@gmail.com</a>
+            &nbsp; | &nbsp;
+            &clubs; <b>Phone:</b>
+            <a href="tel:6006032721" style="color: bisque;"><i>+91 6006032721</i></a>
+        </p>
+    </div>
+
+    <p>
+        <a href="#top" class="nav-btn">&uarr; Back to Top of Gallery</a>
+    </p>
+
+    <!-- ================= FOOTER ================= -->
+    <hr color="#333" size="2px" width="100%">
+    <p>
+        &copy; 2026 Lovely Professional University | CSE326 Frontend Project<br>
+        &reg; Designed by <i><b><u><mark>Aasim</mark></u></b></i> &amp; Team
+    </p>
+    <br>
+
+
+    <!-- ================= BASIC JAVASCRIPT SECTION ================= -->
+    <script>
+        /* FUNCTION 1: Filter gallery cards by showing/hiding them */
+        function filterGallery(category) {
+            // Grab all 4 cards by their ID
+            var streetCard = document.getElementById("card-street");
+            var wildlifeCard = document.getElementById("card-wildlife");
+            var archCard = document.getElementById("card-architecture");
+            var portraitCard = document.getElementById("card-portraits");
+
+            // First, hide all 4 cards
+            streetCard.style.display = "none";
+            wildlifeCard.style.display = "none";
+            archCard.style.display = "none";
+            portraitCard.style.display = "none";
+
+            // Now, show only the card(s) the user clicked!
+            if (category === "all") {
+                streetCard.style.display = "inline-block";
+                wildlifeCard.style.display = "inline-block";
+                archCard.style.display = "inline-block";
+                portraitCard.style.display = "inline-block";
+            }
+            else if (category === "street") {
+                streetCard.style.display = "inline-block";
+            }
+            else if (category === "wildlife") {
+                wildlifeCard.style.display = "inline-block";
+            }
+            else if (category === "architecture") {
+                archCard.style.display = "inline-block";
+            }
+            else if (category === "portraits") {
+                portraitCard.style.display = "inline-block";
+            }
+        }
+
+        /* FUNCTION 2: Calculate total print price using simple addition */
+        function calculateTotal() {
+            // Get the selected prices from the two dropdown menus and convert to numbers
+            var basePrice = Number(document.getElementById("artwork-select").value);
+            var sizePrice = Number(document.getElementById("size-select").value);
+
+            // Add them together
+            var total = basePrice + sizePrice;
+
+            // Update the <pre> receipt box with the new numbers
+            document.getElementById("receipt-box").innerText =
+                "===================================================\n" +
+                "  LUMINA EXHIBITION - OFFICIAL PRINT ESTIMATE\n" +
+                "===================================================\n" +
+                "  Base Artwork Price             : Rs. " + basePrice + "\n" +
+                "  Size & Frame Upgrade           : Rs. " + sizePrice + "\n" +
+                "  University Student Shipping    : FREE\n" +
+                "---------------------------------------------------\n" +
+                "  TOTAL PAYABLE AMOUNT           : Rs. " + total + "\n" +
+                "===================================================";
+        }
+
+        /* FUNCTION 3: Jump to calculator when clicking "Select This Print" on a card */
+        function selectArtworkForPurchase(price, title) {
+            document.getElementById("artwork-select").value = price;
+            calculateTotal();
+            // Scroll down to the buy section
+            document.getElementById("buy-prints").scrollIntoView();
+        }
+
+        /* FUNCTION 4: Show a confirmation popup when ordering */
+        function confirmOrder() {
+            var name = document.getElementById("buyer-name").value;
+
+            if (name === "") {
+                alert("Please enter your name before reserving your print!");
+            } else {
+                alert("Thank you, " + name + "! Your Fine Art Print order has been reserved.");
+            }
+        }
+    </script>
+
+</body>
+
+</html>
